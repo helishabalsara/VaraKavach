@@ -1,0 +1,41 @@
+# VaraKavach - India DPDP Act 2023 Compliant Fingerprint Patterns
+# Each pattern is tagged with DPDP classification for compliance mapping.
+# Patterns are loaded by varakavach/internals/system.py
+
+# --- Sensitive Personal Data (DPDP Act Section 2(t)) ---
+Aadhaar Number: "\\b\\d{4}[-. ]?\\d{4}[-. ]?\\d{4}\\b"
+PAN Card: "(?i)\\b(?:pan(?:number|no|card)?\\s*[=:\\-]\\s*)?[A-Z]{5}[0-9]{4}[A-Z]\\b"
+Indian Passport Number: "\\b[A-Z][1-9][0-9]{6}\\b"
+Indian Voter ID: "\\b[A-Z]{3}[0-9]{7}\\b"
+Indian Driving Licence: "\\b[A-Z]{2}[0-9]{2}[-\\s]?[0-9]{4}[-\\s]?[0-9]{7}\\b"
+Biometric Data Reference: "(?i)\\b(biometric|fingerprint|iris|retina|face_id|voiceprint)\\s*[=:\\-]\\s*[a-zA-Z0-9+/=]{10,}"
+Health Record ID: "(?i)\\b(abha|health.?id|medical.?record|mrn|patient.?id)\\s*[=:\\-]\\s*[0-9A-Z\\-]{6,20}\\b"
+Caste or Religion Field: "(?i)\\b(caste|religion|faith|tribe)\\s*[=:\\-]\\s*['\"]?[a-zA-Z ]{3,40}['\"]?"
+
+# --- Personal Data (DPDP Act Section 2(x)) ---
+Email Address: "\\b[A-Za-z0-9._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,}\\b"
+Indian Mobile Number: "(?:(?:\\+91|0091|91)?[-\\s]?)?[6-9]\\d{9}\\b"
+Date of Birth: "(?i)\\b(?:dob|date.?of.?birth|birth.?date)\\s*[=:\\-]\\s*\\d{1,2}[/\\-.]\\d{1,2}[/\\-.]\\d{2,4}\\b"
+Gender Field: "(?i)\\b(gender|sex)\\s*[=:\\-]\\s*['\"]?(male|female|other|m|f)['\"]?"
+Physical Address: "(?i)\\b(address|addr|flat|house.?no|street|locality|pincode|pin.?code)\\s*[=:\\-]\\s*['\"]?[a-zA-Z0-9 ,\\-\\.]{10,100}['\"]?"
+Full Name Field: "(?i)\\b(full.?name|first.?name|last.?name|fname|lname|customer.?name)\\s*[=:\\-]\\s*['\"]?[A-Za-z ]{3,60}['\"]?"
+IP Address: "\\b(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\b"
+GSTIN: "\\b[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}\\b"
+
+# --- Financial Personal Data (DPDP + RBI Guidelines) ---
+Indian Bank Account Number: "\\b[0-9]{9,18}\\b(?=.*(?:account|acc|bank|ifsc))"
+UPI ID: "[a-zA-Z0-9.\\-_]{2,256}@[a-zA-Z]{2,64}"
+Credit Card Number: "\\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9]{2})[0-9]{12}|3[47][0-9]{13})\\b"
+IFSC Code: "\\b[A-Z]{4}0[A-Z0-9]{6}\\b"
+
+# --- Cloud & Secret Keys (CERT-In §70B + DPDP Obligation) ---
+AWS Access Key ID: "(A3T[A-Z0-9]|AKIA|AGPA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}"
+AWS Secret Key Pattern: "(?i)aws.{0,20}(?:secret|key).{0,5}[=:\\-]\\s*['\"]?[A-Za-z0-9/+]{40}['\"]?"
+Google API Key: "AIza[0-9A-Za-z\\-_]{35}"
+Google Service Account: "\\\"type\\\":\\s*\\\"service_account\\\""
+Slack Bot Token: "xoxb-[0-9A-Za-z\\-]{51}"
+Slack User Token: "xoxp-[0-9A-Za-z\\-]{72}"
+Generic API Secret: "(?i)(?:api.?(?:key|secret|token)|auth.?token|bearer|access.?token)\\s*[=:\\-]\\s*['\"]?[A-Za-z0-9_\\-\\.]{20,}['\"]?"
+Private Key Header: "-----BEGIN (?:RSA |EC |DSA )?PRIVATE KEY-----"
+JWT Token: "eyJ[A-Za-z0-9_\\-]{10,}\\.eyJ[A-Za-z0-9_\\-]{10,}\\.[A-Za-z0-9_\\-]{10,}"
+Database Connection String: "(?i)(?:mongodb|mysql|postgresql|redis|mssql)(?:\\+srv)?://[^\\s'\"]+"

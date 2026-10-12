@@ -1,0 +1,123 @@
+## VaraKavach – Connection Configuration
+## Copy this file to connection.yml and fill in your credentials.
+## Run: varakavach fs --connection connection.yml --fingerprint varakavach_fingerprint.yml
+
+notify:
+  redacted: true               # Mask matched values in output (recommended for production)
+  suppress_duplicates: true
+  slack:
+    webhook_url: https://hooks.slack.com/services/T0XXXXXXXXXXX/BXXXXXXXX/1CIyXXXXXXXXXXXXX
+    mention: "<@U013BDEFABC>"
+  jira:
+    username: "security@yourorg.com"
+    server_url: "https://yourorg.atlassian.net"
+    api_token: "JIRA_API_TOKEN"
+    project: "SEC"
+    issue_type: "Task"
+    labels:
+      - "varakavach"
+      - "dpdp-compliance"
+    assignee: "dpo@yourorg.com"
+    issue_fields:
+      description_template: |
+        [DPDP Act 2023 Alert]
+
+        {details}
+
+severity_rules:
+  Highest:
+    - query: "contains(['Aadhaar Number', 'PAN Card', 'Indian Passport Number', 'Credit Card Number', 'Indian Bank Account Number', 'Biometric Data Reference'], pattern_name)"
+      description: "Critical sensitive personal data exposed — DPDP Tier 1 penalty risk (₹250 Crore)"
+  High:
+    - query: "contains(['Date of Birth', 'Health Record ID', 'UPI ID', 'Caste or Religion Field'], pattern_name)"
+      description: "High-risk personal data exposed — DPDP Tier 2 penalty risk (₹200 Crore)"
+  Medium:
+    - query: "contains(['Email Address', 'Indian Mobile Number', 'Physical Address', 'IP Address'], pattern_name)"
+      description: "Personal data exposed — DPDP Tier 3 penalty risk (₹50 Crore)"
+  Low:
+    - query: "length(matches) <= `5`"
+      description: "Low-volume exposure — monitor and remediate"
+
+options:
+  quick_exit: false
+  max_matches: 100
+
+sources:
+  ## Filesystem scan — scan a directory for personal data in files, PDFs, images, Office docs
+  fs:
+    local_scan:
+      path: /path/to/scan
+      exclude_patterns:
+        - .pyc
+        - __pycache__
+        - node_modules
+        - .git
+        - venv
+
+  ## AWS S3 bucket scan
+  s3:
+    prod_bucket:
+      access_key: YOUR_AWS_ACCESS_KEY_ID
+      secret_key: YOUR_AWS_SECRET_ACCESS_KEY
+      bucket_name: YOUR_S3_BUCKET_NAME
+      cache: true
+      exclude_patterns:
+        - .pyc
+
+  ## Google Cloud Storage
+  gcs:
+    gcs_prod:
+      credentials_file: /path/to/gcp-credentials.json
+      bucket_name: YOUR_GCS_BUCKET_NAME
+      cache: true
+
+  ## MySQL database
+  mysql:
+    mysql_prod:
+      host: YOUR_MYSQL_HOST
+      port: 3306
+      user: YOUR_MYSQL_USER
+      password: YOUR_MYSQL_PASSWORD
+      database: YOUR_DATABASE_NAME
+      limit_start: 0
+      limit_end: 500
+
+  ## PostgreSQL database
+  postgresql:
+    pg_prod:
+      host: YOUR_PG_HOST
+      port: 5432
+      user: YOUR_PG_USER
+      password: YOUR_PG_PASSWORD
+      database: YOUR_DATABASE_NAME
+      limit_start: 0
+      limit_end: 500
+
+  ## MongoDB
+  mongodb:
+    mongo_prod:
+      uri: mongodb+srv://user:pass@cluster.mongodb.net/dbname
+      database: YOUR_DATABASE_NAME
+      limit_start: 0
+      limit_end: 500
+
+  ## Redis
+  redis:
+    redis_prod:
+      host: YOUR_REDIS_HOST
+      port: 6379
+      password: YOUR_REDIS_PASSWORD
+
+  ## Slack workspace
+  slack:
+    workspace_prod:
+      token: xoxp-XXXXXXXXXXXXXXXXXX
+      channel_types: "public_channel,private_channel"
+      limit_mins: 60
+      archived_channels: false
+      onlyArchived: false
+
+  ## Text snippet (for testing)
+  text:
+    test_snippet:
+      text: "Test: john@example.com, Aadhaar 1234 5678 9012, PAN ABCDE1234F"

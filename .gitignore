@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+previous_alerts.json
+user_ids.json
+data/
+*.log
+connection.yml
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+_dpdp_enhanced_tmp.png
+dpdp_compliance_report.html
